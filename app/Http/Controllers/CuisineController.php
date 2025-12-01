@@ -3,62 +3,71 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cuisine;
 
 class CuisineController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Show all cuisines
     public function index()
     {
-        //
+        $cuisines = Cuisine::all();
+        return view('cuisines.index', compact('cuisines'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show form to create a new cuisine
     public function create()
     {
-        //
+        return view('cuisines.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store a new cuisine
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'origin' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+
+        Cuisine::create($request->all());
+
+        return redirect()->route('cuisines.index')
+                         ->with('success', 'Cuisine added successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // Show a specific cuisine
+    public function show(Cuisine $cuisine)
     {
-        //
+        return view('cuisines.show', compact('cuisine'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    // Show form to edit a cuisine
+    public function edit(Cuisine $cuisine)
     {
-        //
+        return view('cuisines.edit', compact('cuisine'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Update an existing cuisine
+    public function update(Request $request, Cuisine $cuisine)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'origin' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+
+        $cuisine->update($request->all());
+
+        return redirect()->route('cuisines.index')
+                         ->with('success', 'Cuisine updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Delete a cuisine
+    public function destroy(Cuisine $cuisine)
     {
-        //
+        $cuisine->delete();
+
+        return redirect()->route('cuisines.index')
+                         ->with('success', 'Cuisine deleted successfully!');
     }
 }
