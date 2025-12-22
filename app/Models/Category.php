@@ -6,10 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['name']; // breakfast, lunch, dinner
-
-    public function recipes()
-    {
-        return $this->hasMany(Recipe::class);
-    }
+    //
 }
